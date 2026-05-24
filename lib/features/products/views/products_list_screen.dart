@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mini_catalogo_produtos/core/services/data_seeder.dart';
 import 'package:mini_catalogo_produtos/features/auth/viewmodels/login_viewmodel.dart';
-import 'package:mini_catalogo_produtos/features/auth/views/login_screen.dart';
 import 'package:mini_catalogo_produtos/features/products/viewmodels/products_list_viewmodel.dart';
 import 'package:mini_catalogo_produtos/features/products/views/add_product_screen.dart';
 import 'package:mini_catalogo_produtos/shared/widgets/category_chip.dart';
@@ -10,7 +9,7 @@ import 'package:mini_catalogo_produtos/shared/widgets/product_card.dart';
 import 'package:provider/provider.dart';
 
 class ProductsListScreen extends StatefulWidget {
-  const ProductsListScreen({Key? key}) : super(key: key);
+  const ProductsListScreen({super.key});
 
   @override
   State<ProductsListScreen> createState() => _ProductsListScreenState();
@@ -84,14 +83,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     child: const Text('Logout'),
-                    onTap: () {
-                      context.read<LoginViewModel>().logout();
-                      Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) => const LoginScreen(),
-                        ),
-                      );
-                    },
+                    onTap: () => context.read<LoginViewModel>().logout(),
                   ),
                 ],
                 icon: const Icon(Icons.more_vert),
@@ -294,8 +286,10 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
             ),
           );
 
-          if (productAdded == true && mounted) {
-            context.read<ProductsListViewModel>().loadProducts();
+          if (!context.mounted) return;
+
+          if (productAdded == true) {
+            await context.read<ProductsListViewModel>().loadProducts();
           }
         },
         backgroundColor: const Color(0xFF6C5CE7),

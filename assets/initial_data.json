@@ -1,0 +1,136 @@
+{
+  "categorias": [
+    {
+      "id": "eletronicos",
+      "nome": "Eletrônicos",
+      "descricao": "Produtos eletrônicos, acessórios e dispositivos digitais",
+      "ativo": true,
+      "ordem": 1
+    },
+    {
+      "id": "vestuario",
+      "nome": "Vestuário",
+      "descricao": "Roupas, calçados e acessórios de moda",
+      "ativo": true,
+      "ordem": 2
+    },
+    {
+      "id": "alimentos",
+      "nome": "Alimentos",
+      "descricao": "Produtos alimentícios e bebidas",
+      "ativo": true,
+      "ordem": 3
+    },
+    {
+      "id": "livros",
+      "nome": "Livros",
+      "descricao": "Livros físicos, digitais e materiais de leitura",
+      "ativo": true,
+      "ordem": 4
+    },
+    {
+      "id": "beleza",
+      "nome": "Beleza",
+      "descricao": "Cosméticos, cuidados pessoais e perfumaria",
+      "ativo": true,
+      "ordem": 5
+    }
+  ],
+  "status_produto": [
+    {
+      "id": "ativo",
+      "nome": "Ativo",
+      "descricao": "Produto disponível para visualização e venda",
+      "ativo": true,
+      "ordem": 1
+    },
+    {
+      "id": "inativo",
+      "nome": "Inativo",
+      "descricao": "Produto oculto ou temporariamente desativado",
+      "ativo": true,
+      "ordem": 2
+    },
+    {
+      "id": "em_falta",
+      "nome": "Em Falta",
+      "descricao": "Produto indisponível no estoque",
+      "ativo": true,
+      "ordem": 3
+    }
+  ],
+  "produtos": [
+    {
+      "id": "notebook-dell-inspiron",
+      "name": "Notebook Dell Inspiron",
+      "description": "Notebook com processador Intel i7, 16 GB de RAM e SSD de 512 GB",
+      "price": 4299.9,
+      "category": "Eletrônicos",
+      "categoryId": "eletronicos",
+      "status": "Ativo",
+      "statusId": "ativo",
+      "imageUrl": "https://via.placeholder.com/600x400?text=Notebook+Dell",
+      "createdBy": "admin@exemplo.com"
+    },
+    {
+      "id": "smartphone-samsung-galaxy",
+      "name": "Smartphone Samsung Galaxy",
+      "description": "Smartphone com tela AMOLED, câmera de 48 MP e 128 GB de armazenamento",
+      "price": 2499.9,
+      "category": "Eletrônicos",
+      "categoryId": "eletronicos",
+      "status": "Ativo",
+      "statusId": "ativo",
+      "imageUrl": "https://via.placeholder.com/600x400?text=Smartphone",
+      "createdBy": "admin@exemplo.com"
+    },
+    {
+      "id": "camiseta-basica-algodao",
+      "name": "Camiseta Básica Algodão",
+      "description": "Camiseta unissex 100% algodão com acabamento confortável",
+      "price": 59.9,
+      "category": "Vestuário",
+      "categoryId": "vestuario",
+      "status": "Ativo",
+      "statusId": "ativo",
+      "imageUrl": "https://via.placeholder.com/600x400?text=Camiseta",
+      "createdBy": "admin@exemplo.com"
+    },
+    {
+      "id": "cafe-especial-500g",
+      "name": "Café Especial 500g",
+      "description": "Café torrado e moído com notas de chocolate e caramelo",
+      "price": 34.9,
+      "category": "Alimentos",
+      "categoryId": "alimentos",
+      "status": "Em Falta",
+      "statusId": "em_falta",
+      "imageUrl": "https://via.placeholder.com/600x400?text=Cafe",
+      "createdBy": "admin@exemplo.com"
+    },
+    {
+      "id": "livro-habitos-atomicos",
+      "name": "Livro Hábitos Atômicos",
+      "description": "Livro sobre construção de hábitos, produtividade e melhoria contínua",
+      "price": 54.9,
+      "category": "Livros",
+      "categoryId": "livros",
+      "status": "Ativo",
+      "statusId": "ativo",
+      "imageUrl": "https://via.placeholder.com/600x400?text=Livro",
+      "createdBy": "admin@exemplo.com"
+    },
+    {
+      "id": "hidratante-facial",
+      "name": "Hidratante Facial",
+      "description": "Hidratante facial de uso diário para todos os tipos de pele",
+      "price": 79.9,
+      "category": "Beleza",
+      "categoryId": "beleza",
+      "status": "Inativo",
+      "statusId": "inativo",
+      "imageUrl": "https://via.placeholder.com/600x400?text=Hidratante",
+      "createdBy": "admin@exemplo.com"
+    }
+  ]
+}

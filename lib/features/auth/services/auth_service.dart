@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:mini_catalogo_produtos/features/auth/models/user.dart';
 
 class AuthService {

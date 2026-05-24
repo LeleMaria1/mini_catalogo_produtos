@@ -9,14 +9,14 @@ class ProductCard extends StatelessWidget {
   final VoidCallback? onDelete;
 
   const ProductCard({
-    Key? key,
+    super.key,
     required this.name,
     required this.description,
     required this.price,
     required this.imageUrl,
     required this.onTap,
     this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

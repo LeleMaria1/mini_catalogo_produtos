@@ -5,7 +5,7 @@ import 'package:mini_catalogo_produtos/shared/widgets/custom_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class AddProductScreen extends StatefulWidget {
-  const AddProductScreen({Key? key}) : super(key: key);
+  const AddProductScreen({super.key});
 
   @override
   State<AddProductScreen> createState() => _AddProductScreenState();
@@ -185,7 +185,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 const SizedBox(height: 16),
                 // Category Dropdown
                 DropdownButtonFormField<String>(
-                  value: _selectedCategory,
+                  initialValue: _selectedCategory,
                   decoration: InputDecoration(
                     labelText: 'Categoria',
                     prefixIcon: const Icon(Icons.category_outlined),
@@ -280,7 +280,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFF7675).withOpacity(0.1),
+                      color: const Color(0xFFFF7675).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: const Color(0xFFFF7675)),
                     ),
@@ -307,7 +307,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                   Container(
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF00B894).withOpacity(0.1),
+                      color: const Color(0xFF00B894).withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(color: const Color(0xFF00B894)),
                     ),

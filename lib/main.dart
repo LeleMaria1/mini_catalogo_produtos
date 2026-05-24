@@ -10,20 +10,18 @@ import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
-  } on UnsupportedError {
-    // Firebase options are currently configured only for web, Android, and iOS.
-  }
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +32,9 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AddProductViewModel()),
       ],
       child: MaterialApp(
-        title: 'Mini Catálogo de Produtos',
-        theme: AppTheme.lightTheme,
+        title: 'Mini Catalogo de Produtos',
         debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
         home: const AuthWrapper(),
       ),
     );
@@ -44,7 +42,7 @@ class MyApp extends StatelessWidget {
 }
 
 class AuthWrapper extends StatelessWidget {
-  const AuthWrapper({Key? key}) : super(key: key);
+  const AuthWrapper({super.key});
 
   @override
   Widget build(BuildContext context) {

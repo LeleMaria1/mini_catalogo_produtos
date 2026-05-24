@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mini_catalogo_produtos/features/auth/viewmodels/login_viewmodel.dart';
-import 'package:mini_catalogo_produtos/features/products/views/products_list_screen.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -133,7 +132,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFFF7675).withOpacity(0.1),
+                              color: const Color(0xFFFF7675)
+                                  .withValues(alpha: 0.1),
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
                                 color: const Color(0xFFFF7675),
@@ -173,13 +173,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       _emailController.text,
                                       _passwordController.text,
                                     );
-                                    if (success && mounted) {
-                                      Navigator.of(context).pushReplacement(
-                                        MaterialPageRoute(
-                                          builder: (_) =>
-                                              const ProductsListScreen(),
-                                        ),
-                                      );
+                                    if (!success && mounted) {
+                                      _passwordController.clear();
                                     }
                                   },
                             style: ElevatedButton.styleFrom(
@@ -213,16 +208,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         Container(
                           padding: const EdgeInsets.all(12),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF00B894).withOpacity(0.1),
+                            color: const Color(0xFF00B894)
+                                .withValues(alpha: 0.1),
                             borderRadius: BorderRadius.circular(8),
                             border: Border.all(
                               color: const Color(0xFF00B894),
                             ),
                           ),
-                          child: Column(
+                          child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
+                              Text(
                                 'Credenciais Demo:',
                                 style: TextStyle(
                                   fontSize: 12,
@@ -230,15 +226,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Color(0xFF00B894),
                                 ),
                               ),
-                              const SizedBox(height: 4),
-                              const Text(
+                              SizedBox(height: 4),
+                              Text(
                                 'Email: admin@catalogo.com',
                                 style: TextStyle(
                                   fontSize: 11,
                                   color: Color(0xFF00B894),
                                 ),
                               ),
-                              const Text(
+                              Text(
                                 'Senha: admin123',
                                 style: TextStyle(
                                   fontSize: 11,

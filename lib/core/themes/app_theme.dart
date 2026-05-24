@@ -21,7 +21,6 @@ class AppTheme {
         primary: primaryColor,
         secondary: secondaryColor,
         tertiary: accentColor,
-        background: backgroundColor,
         surface: Colors.white,
         error: accentColor,
       ),
