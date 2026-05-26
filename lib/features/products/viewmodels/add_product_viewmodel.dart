@@ -80,6 +80,47 @@ class AddProductViewModel extends ChangeNotifier {
     }
   }
 
+  Future<bool> updateProduct({
+    required Product product,
+    required String name,
+    required String description,
+    required double price,
+    required String category,
+    required String imageUrl,
+    String? newCategory,
+  }) async {
+    _isLoading = true;
+    _errorMessage = null;
+    _successMessage = null;
+    notifyListeners();
+
+    try {
+      String finalCategory = category;
+      if (category == 'Novo' && newCategory != null && newCategory.isNotEmpty) {
+        finalCategory = newCategory;
+      }
+
+      final updatedProduct = product.copyWith(
+        name: name,
+        description: description,
+        price: price,
+        category: finalCategory,
+        imageUrl: imageUrl,
+      );
+
+      await _firestoreService.updateProduct(updatedProduct);
+      _successMessage = 'Produto atualizado com sucesso!';
+      _isLoading = false;
+      notifyListeners();
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString();
+      _isLoading = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   void clearMessages() {
     _errorMessage = null;
     _successMessage = null;

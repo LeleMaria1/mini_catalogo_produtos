@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mini_catalogo_produtos/core/services/data_seeder.dart';
+import 'package:mini_catalogo_produtos/core/seeder/data_seeder.dart';
 import 'package:mini_catalogo_produtos/features/auth/viewmodels/login_viewmodel.dart';
+import 'package:mini_catalogo_produtos/features/products/models/product.dart';
 import 'package:mini_catalogo_produtos/features/products/viewmodels/products_list_viewmodel.dart';
 import 'package:mini_catalogo_produtos/features/products/views/add_product_screen.dart';
+import 'package:mini_catalogo_produtos/features/products/views/edit_product_screen.dart';
 import 'package:mini_catalogo_produtos/shared/widgets/category_chip.dart';
 import 'package:mini_catalogo_produtos/shared/widgets/custom_app_bar.dart';
 import 'package:mini_catalogo_produtos/shared/widgets/product_card.dart';
@@ -17,7 +19,6 @@ class ProductsListScreen extends StatefulWidget {
 
 class _ProductsListScreenState extends State<ProductsListScreen> {
   late TextEditingController _searchController;
-  bool _isSeeding = false;
 
   @override
   void initState() {
@@ -29,45 +30,123 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
     });
   }
 
+  Future<void> _seedMasterData() async {
+    try {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Inicializando dados mestres...')),
+      );
+
+      await DataSeeder.seedData();
+
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Dados mestres inicializados com sucesso.'),
+          backgroundColor: Color(0xFF00B894),
+        ),
+      );
+
+      await context.read<ProductsListViewModel>().loadProducts();
+    } catch (e) {
+      if (!mounted) return;
+      final errorMessage = e.toString();
+      final permissionMessage = errorMessage.contains('permission-denied') ||
+              errorMessage.contains('restrita a administradores')
+          ? 'Operação restrita a administradores no Firestore. Verifique as regras ou use autenticação admin.'
+          : 'Erro ao inicializar dados mestres: $errorMessage';
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(permissionMessage),
+          backgroundColor: const Color(0xFFFF7675),
+        ),
+      );
+    }
+  }
+
+  void _showProductActions(Product product) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(
+                title: Text(product.name),
+                subtitle: const Text('Escolha uma ação para este produto'),
+              ),
+              ListTile(
+                leading: const Icon(Icons.edit_outlined),
+                title: const Text('Editar'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _editProduct(product);
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.delete_outline, color: Color(0xFFFF7675)),
+                title: const Text('Excluir'),
+                textColor: const Color(0xFFFF7675),
+                onTap: () {
+                  Navigator.pop(context);
+                  _confirmDelete(product.id);
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Future<void> _editProduct(Product product) async {
+    final updated = await Navigator.of(context).push<bool>(
+      MaterialPageRoute(
+        builder: (_) => EditProductScreen(product: product),
+      ),
+    );
+
+    if (!mounted) return;
+    if (updated == true) {
+      await context.read<ProductsListViewModel>().loadProducts();
+    }
+  }
+
+  void _confirmDelete(String id) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Excluir Produto'),
+          content:
+              const Text('Deseja realmente excluir este produto?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.pop(context);
+                await context.read<ProductsListViewModel>().deleteProduct(id);
+              },
+              child: const Text(
+                'Excluir',
+                style: TextStyle(color: Color(0xFFFF7675)),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
-  }
-
-  Future<void> _seedData() async {
-    if (_isSeeding) return;
-
-    setState(() {
-      _isSeeding = true;
-    });
-
-    try {
-      await DataSeeder.seedData();
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Dados inicializados com sucesso.'),
-          backgroundColor: Color(0xFF00B894),
-        ),
-      );
-    } catch (e) {
-      if (!mounted) return;
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Erro ao inicializar dados: $e'),
-          backgroundColor: const Color(0xFFFF7675),
-        ),
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isSeeding = false;
-        });
-      }
-    }
   }
 
   @override
@@ -79,11 +158,22 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
           Padding(
             padding: const EdgeInsets.all(8),
             child: Center(
-              child: PopupMenuButton(
+              child: PopupMenuButton<String>(
+                onSelected: (value) {
+                  if (value == 'seed') {
+                    _seedMasterData();
+                  } else if (value == 'logout') {
+                    context.read<LoginViewModel>().logout();
+                  }
+                },
                 itemBuilder: (context) => [
-                  PopupMenuItem(
-                    child: const Text('Logout'),
-                    onTap: () => context.read<LoginViewModel>().logout(),
+                  const PopupMenuItem<String>(
+                    value: 'seed',
+                    child: Text('Inicializar Dados Mestres'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'logout',
+                    child: Text('Logout'),
                   ),
                 ],
                 icon: const Icon(Icons.more_vert),
@@ -96,63 +186,45 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
         builder: (context, viewModel, _) {
           return Column(
             children: [
-              // Search Bar
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
-                        onPressed: _isSeeding ? null : _seedData,
-                        icon: _isSeeding
-                            ? const SizedBox(
-                                width: 18,
-                                height: 18,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.white,
-                                ),
-                              )
-                            : const Icon(Icons.storage_outlined),
-                        label: Text(
-                          _isSeeding
-                              ? 'Inicializando...'
-                              : 'Inicializar Dados',
-                        ),
-                      ),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: viewModel.search,
+                  decoration: InputDecoration(
+                    hintText: 'Buscar produtos...',
+                    prefixIcon: const Icon(Icons.search),
+                    suffixIcon: _searchController.text.isNotEmpty
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              _searchController.clear();
+                              viewModel.search('');
+                            },
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFFE8E8E8)),
                     ),
-                    const SizedBox(height: 12),
-                    TextField(
-                      controller: _searchController,
-                      onChanged: viewModel.search,
-                      decoration: InputDecoration(
-                        hintText: 'Buscar produtos...',
-                        prefixIcon: const Icon(Icons.search),
-                        suffixIcon: _searchController.text.isNotEmpty
-                            ? IconButton(
-                                icon: const Icon(Icons.clear),
-                                onPressed: () {
-                                  _searchController.clear();
-                                  viewModel.search('');
-                                },
-                              )
-                            : null,
-                        filled: true,
-                        fillColor: Colors.white,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: Color(0xFFE8E8E8)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
-                          borderSide:
-                              const BorderSide(color: Color(0xFFE8E8E8)),
-                        ),
-                      ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(color: Color(0xFFE8E8E8)),
                     ),
-                  ],
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: _seedMasterData,
+                    icon: const Icon(Icons.cloud_download_outlined),
+                    label: const Text('Inicializar Dados Mestres'),
+                  ),
                 ),
               ),
               // Categories
@@ -234,42 +306,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
                         description: product.description,
                         price: product.price,
                         imageUrl: product.imageUrl,
-                        onTap: () {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                '${product.name} - R\$ ${product.price}',
-                              ),
-                              duration: const Duration(seconds: 2),
-                            ),
-                          );
-                        },
-                        onDelete: () {
-                          showDialog(
-                            context: context,
-                            builder: (context) => AlertDialog(
-                              title: const Text('Excluir Produto'),
-                              content: Text(
-                                  'Tem certeza que deseja excluir ${product.name}?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('Cancelar'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    viewModel.deleteProduct(product.id);
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text(
-                                    'Excluir',
-                                    style: TextStyle(color: Color(0xFFFF7675)),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
+                        onTap: () => _showProductActions(product),
                       );
                     },
                   ),

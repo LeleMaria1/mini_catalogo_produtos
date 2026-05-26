@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mini_catalogo_produtos/core/themes/app_theme.dart';
@@ -10,12 +11,31 @@ import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
+Future<void> testFirebaseConnection() async {
+  try {
+    await FirebaseFirestore.instance
+        .collection('test_connection')
+        .doc('connection_test')
+        .set({
+      'connectedAt': DateTime.now().toUtc().toIso8601String(),
+      'status': 'ok',
+    });
+
+    debugPrint('Firebase test connection successful: document written to test_connection');
+  } catch (error, stackTrace) {
+    debugPrint('Firebase test connection failed: $error');
+    debugPrint('$stackTrace');
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  await testFirebaseConnection();
 
   runApp(const MyApp());
 }

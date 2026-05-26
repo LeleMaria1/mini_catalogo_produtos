@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mini_catalogo_produtos/features/auth/viewmodels/login_viewmodel.dart';
+import 'package:mini_catalogo_produtos/features/auth/views/register_screen.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -203,7 +204,18 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 12),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => const RegisterScreen(),
+                              ),
+                            );
+                          },
+                          child: const Text('Ainda não tem conta? Cadastre-se'),
+                        ),
+                        const SizedBox(height: 12),
                         // Demo credentials hint
                         Container(
                           padding: const EdgeInsets.all(12),
@@ -215,9 +227,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: const Color(0xFF00B894),
                             ),
                           ),
-                          child: const Column(
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
+                            children: const [
                               Text(
                                 'Credenciais Demo:',
                                 style: TextStyle(
@@ -227,14 +239,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ),
                               ),
                               SizedBox(height: 4),
-                              Text(
+                              SelectableText(
                                 'Email: admin@catalogo.com',
                                 style: TextStyle(
                                   fontSize: 11,
                                   color: Color(0xFF00B894),
                                 ),
                               ),
-                              Text(
+                              SelectableText(
                                 'Senha: admin123',
                                 style: TextStyle(
                                   fontSize: 11,
