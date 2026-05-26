@@ -84,3 +84,7 @@ coverage/
 
 # Firebase
 lib/firebase_options.dart
+
+# arquivos de ambiente
+.env
+.env.*
