@@ -4,11 +4,11 @@
 
 Abaixo estão os links para visualizar a aplicação em execução e o código-fonte completo:
 
-[![Acessar Produção](https://img.shields.io/badge/Acessar_Produção-00B894?style=for-the-badge&logo=rocket&logoColor=white)](URL_DO_DEPLOY)
-[![Ver Código](https://img.shields.io/badge/Ver_Código--Fonte-6C5CE7?style=for-the-badge&logo=github&logoColor=white)](https://github.com/seu-usuario/mini_catalogo_produtos)
+[![Acessar Produção](https://img.shields.io/badge/Acessar_Produção-00B894?style=for-the-badge&logo=rocket&logoColor=white)](https://mini-catalogo-produtos.web.app)
+[![Ver Código](https://img.shields.io/badge/Ver_Código--Fonte-6C5CE7?style=for-the-badge&logo=github&logoColor=white)](https://github.com/LeleMaria1/mini_catalogo_produtos.git)
 
-*   **Ambiente de Produção:** [URL_DO_DEPLOY](URL_DO_DEPLOY)
-*   **Repositório Git:** [https://github.com/seu-usuario/mini_catalogo_produtos](https://github.com/seu-usuario/mini_catalogo_produtos)
+*   **Ambiente de Produção:** [https://mini-catalogo-produtos.web.app)
+*   **Repositório Git:** [https://github.com/LeleMaria1/mini_catalogo_produtos.git](https://github.com/LeleMaria1/mini_catalogo_produtos.git)
 
 ---
 
