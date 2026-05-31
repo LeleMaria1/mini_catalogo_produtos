@@ -1,5 +1,21 @@
 # Mini Catálogo de Produtos 📦
 
+## 🚀 Acesso Rápido
+
+Abaixo estão os links para visualizar a aplicação em execução e o código-fonte completo:
+
+[![Acessar Produção](https://img.shields.io/badge/Acessar_Produção-00B894?style=for-the-badge&logo=rocket&logoColor=white)](URL_DO_DEPLOY)
+[![Ver Código](https://img.shields.io/badge/Ver_Código--Fonte-6C5CE7?style=for-the-badge&logo=github&logoColor=white)](https://github.com/seu-usuario/mini_catalogo_produtos)
+
+*   **Ambiente de Produção:** [URL_DO_DEPLOY](URL_DO_DEPLOY)
+*   **Repositório Git:** [https://github.com/seu-usuario/mini_catalogo_produtos](https://github.com/seu-usuario/mini_catalogo_produtos)
+
+---
+
+![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white)
+![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black)
+![Dart](https://img.shields.io/badge/Dart-0175C2?style=flat-square&logo=dart&logoColor=white)
+
 Um aplicativo Flutter completo para gerenciar um catálogo de produtos com arquitetura **MVVM**, utilizando **Provider** para gerenciamento de estado e **Firebase/Firestore** como backend.
 
 ## 🎯 Funcionalidades
