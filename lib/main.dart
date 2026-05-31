@@ -9,7 +9,8 @@ import 'package:mini_catalogo_produtos/features/products/viewmodels/products_lis
 import 'package:mini_catalogo_produtos/features/products/views/products_list_screen.dart';
 import 'package:provider/provider.dart';
 
-import 'firebase_options.dart';
+import 'firebase/firebase_options_dev.dart' as dev;
+import 'firebase/firebase_options_prd.dart' as prd;
 
 Future<void> testFirebaseConnection() async {
   try {
@@ -28,11 +29,14 @@ Future<void> testFirebaseConnection() async {
   }
 }
 
+const bool isProduction = false;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+    options: isProduction
+      ? prd.DefaultFirebaseOptions.currentPlatform
+      : dev.DefaultFirebaseOptions.currentPlatform,
   );
 
   await testFirebaseConnection();
