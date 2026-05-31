@@ -9,7 +9,7 @@ Abaixo estão os links para visualizar a aplicação em execução e o código-f
 
 *   **Ambiente de Produção:** [https://mini-catalogo-produtos.web.app](https://mini-catalogo-produtos.web.app)
 *   **Repositório Git:** [https://github.com/LeleMaria1/mini_catalogo_produtos.git](https://github.com/LeleMaria1/mini_catalogo_produtos.git)
-
+ 
 ---
 
 ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white)

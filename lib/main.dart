@@ -76,8 +76,8 @@ class AuthWrapper extends StatelessWidget {
           return const ProductsListScreen();
         } else {
           return const LoginScreen();
-        }
-      },
+        } 
+      }, 
     );
   }
 }
