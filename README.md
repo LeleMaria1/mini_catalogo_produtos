@@ -5,7 +5,6 @@
 Abaixo estão os links para visualizar a aplicação em execução e o código-fonte completo:
 
 [![Acessar Produção](https://mini-catalogo-produtos.web.app)](https://mini-catalogo-produtos.web.app)
-[![Acessar Produção](https://img.shields.io/badge/Acessar_Produção-00B894?style=for-the-badge&logo=rocket&logoColor=white)](https://mini-catalogo-produtos.web.app)
 [![Ver Código](https://github.com/LeleMaria1/mini_catalogo_produtos.git)](https://github.com/LeleMaria1/mini_catalogo_produtos.git)
 
 *   **Ambiente de Produção:** [https://mini-catalogo-produtos.web.app](https://mini-catalogo-produtos.web.app)
