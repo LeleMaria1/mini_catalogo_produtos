@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "519849534479",
+    "project_id": "mini-catalogo-dev",
+    "storage_bucket": "mini-catalogo-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:519849534479:android:8bbcd4523804fc985daf7a",
+        "android_client_info": {
+          "package_name": "com.example.mini_catalogo_produtos"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvqfX-yS6cQ7o5sRYwyx3kP5hyJkJKfX4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
