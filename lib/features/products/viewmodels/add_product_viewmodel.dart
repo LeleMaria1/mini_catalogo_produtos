@@ -16,13 +16,9 @@ class AddProductViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   String? get successMessage => _successMessage;
 
-  AddProductViewModel() {
-    _loadCategories();
-  }
-
-  Future<void> _loadCategories() async {
+  Future<void> loadCategories(String createdBy) async {
     try {
-      _categories = await _firestoreService.getCategories();
+      _categories = await _firestoreService.getCategories(createdBy);
       // Add "Novo" category option
       if (!_categories.contains('Novo')) {
         _categories.insert(0, 'Novo');
@@ -49,6 +45,10 @@ class AddProductViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
+      if (createdBy.isEmpty) {
+        throw Exception('Usuário não autenticado.');
+      }
+
       String finalCategory = category;
       
       // If "Novo" was selected and a new category was provided
@@ -95,6 +95,10 @@ class AddProductViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
+      if (product.createdBy.isEmpty) {
+        throw Exception('Produto sem usuário responsável.');
+      }
+
       String finalCategory = category;
       if (category == 'Novo' && newCategory != null && newCategory.isNotEmpty) {
         finalCategory = newCategory;

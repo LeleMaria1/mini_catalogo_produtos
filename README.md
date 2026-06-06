@@ -7,9 +7,9 @@ Abaixo estão os links para visualizar a aplicação em execução e o código-f
 [![Acessar Produção](https://img.shields.io/badge/Acessar_Produção-00B894?style=for-the-badge&logo=rocket&logoColor=white)](https://mini-catalogo-produtos.web.app)
 [![Ver Código](https://img.shields.io/badge/Ver_Código--Fonte-6C5CE7?style=for-the-badge&logo=github&logoColor=white)](https://github.com/LeleMaria1/mini_catalogo_produtos.git)
 
-*   **Ambiente de Produção:** [https://mini-catalogo-produtos.web.app)
+*   **Ambiente de Produção:** [https://mini-catalogo-produtos.web.app](https://mini-catalogo-produtos.web.app)
 *   **Repositório Git:** [https://github.com/LeleMaria1/mini_catalogo_produtos.git](https://github.com/LeleMaria1/mini_catalogo_produtos.git)
-
+ 
 ---
 
 ![Flutter](https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white)

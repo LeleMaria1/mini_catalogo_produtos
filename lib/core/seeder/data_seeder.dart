@@ -5,7 +5,7 @@ class DataSeeder {
   static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   static const String _configCollection = 'system_config';
-  static const String _initializationDocument = 'initialization';
+  static const String _initializationDocumentPrefix = 'initialization';
 
   static const List<String> _categorias = [
     'Eletrônicos',
@@ -23,31 +23,33 @@ class DataSeeder {
     'Descontinuado',
   ];
 
-  static const Map<String, dynamic> _adminUsuario = {
-    'nome': 'Administrador',
-    'email': 'admin@exemplo.com',
-    'role': 'admin',
-    'senha': '123456',
-  };
+  static Future<void> seedData(String createdBy) async {
+    if (createdBy.isEmpty) {
+      throw Exception('Usuario nao autenticado.');
+    }
 
-  static Future<void> seedData() async {
     final batch = _firestore.batch();
+    final ownerDocId = _docId(createdBy);
 
     _addMasterDataToBatch(
       batch: batch,
       collectionPath: 'categorias',
       values: _categorias,
+      ownerDocId: ownerDocId,
+      createdBy: createdBy,
     );
     _addMasterDataToBatch(
       batch: batch,
       collectionPath: 'status_produto',
       values: _statusProduto,
+      ownerDocId: ownerDocId,
+      createdBy: createdBy,
     );
 
     batch.set(
-      _firestore.collection('usuarios').doc('admin_exemplo_com'),
+      _firestore.collection('usuarios').doc(ownerDocId),
       {
-        ..._adminUsuario,
+        'email': createdBy,
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
@@ -55,9 +57,12 @@ class DataSeeder {
     );
 
     batch.set(
-      _firestore.collection(_configCollection).doc(_initializationDocument),
+      _firestore
+          .collection(_configCollection)
+          .doc('${_initializationDocumentPrefix}_$ownerDocId'),
       {
         'seedCompleted': true,
+        'createdBy': createdBy,
         'completedAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       },
@@ -73,12 +78,17 @@ class DataSeeder {
     required WriteBatch batch,
     required String collectionPath,
     required List<String> values,
+    required String ownerDocId,
+    required String createdBy,
   }) {
     for (final value in values) {
       batch.set(
-        _firestore.collection(collectionPath).doc(_docId(value)),
+        _firestore
+            .collection(collectionPath)
+            .doc('${ownerDocId}_${_docId(value)}'),
         {
           'nome': value,
+          'createdBy': createdBy,
           'createdAt': FieldValue.serverTimestamp(),
           'updatedAt': FieldValue.serverTimestamp(),
         },

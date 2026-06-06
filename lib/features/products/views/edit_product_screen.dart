@@ -32,6 +32,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
     _imageUrlController = TextEditingController(text: widget.product.imageUrl);
     _newCategoryController = TextEditingController();
     _selectedCategory = widget.product.category;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userKey = context.read<LoginViewModel>().user?.email ?? '';
+      context.read<AddProductViewModel>().loadCategories(userKey);
+    });
   }
 
   @override
@@ -198,7 +203,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
-                  value: _selectedCategory,
+                  initialValue: _selectedCategory,
                   decoration: InputDecoration(
                     labelText: 'Categoria',
                     prefixIcon: const Icon(Icons.category_outlined),

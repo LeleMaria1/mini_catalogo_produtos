@@ -14,6 +14,17 @@ class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
 
+  Future<void> _submitLogin(LoginViewModel viewModel) async {
+    final success = await viewModel.login(
+      _emailController.text,
+      _passwordController.text,
+    );
+
+    if (!success && mounted) {
+      _passwordController.clear();
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -78,6 +89,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         // Email Field
                         TextField(
                           controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
                           decoration: InputDecoration(
                             hintText: 'Email',
                             prefixIcon: const Icon(Icons.email_outlined),
@@ -105,6 +118,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         TextField(
                           controller: _passwordController,
                           obscureText: true,
+                          textInputAction: TextInputAction.done,
+                          onSubmitted: (_) => _submitLogin(viewModel),
                           decoration: InputDecoration(
                             hintText: 'Senha',
                             prefixIcon: const Icon(Icons.lock_outlined),
@@ -169,15 +184,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: ElevatedButton(
                             onPressed: viewModel.isLoading
                                 ? null
-                                : () async {
-                                    final success = await viewModel.login(
-                                      _emailController.text,
-                                      _passwordController.text,
-                                    );
-                                    if (!success && mounted) {
-                                      _passwordController.clear();
-                                    }
-                                  },
+                                : () => _submitLogin(viewModel),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: const Color(0xFF6C5CE7),
                               padding: const EdgeInsets.symmetric(vertical: 14),
@@ -214,47 +221,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             );
                           },
                           child: const Text('Ainda não tem conta? Cadastre-se'),
-                        ),
-                        const SizedBox(height: 12),
-                        // Demo credentials hint
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF00B894)
-                                .withValues(alpha: 0.1),
-                            borderRadius: BorderRadius.circular(8),
-                            border: Border.all(
-                              color: const Color(0xFF00B894),
-                            ),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Credenciais Demo:',
-                                style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF00B894),
-                                ),
-                              ),
-                              SizedBox(height: 4),
-                              SelectableText(
-                                'Email: admin@catalogo.com',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: Color(0xFF00B894),
-                                ),
-                              ),
-                              SelectableText(
-                                'Senha: admin123',
-                                style: TextStyle(
-                                  fontSize: 11,
-                                  color: Color(0xFF00B894),
-                                ),
-                              ),
-                            ],
-                          ),
                         ),
                       ],
                     );
