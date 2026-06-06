@@ -49,8 +49,10 @@ class FirestoreService {
 
   Future<List<String>> getCategories(String createdBy) async {
     try {
-      final masterSnapshot =
-          await _firestore.collection(categoriesCollection).get();
+      final masterSnapshot = await _firestore
+          .collection(categoriesCollection)
+          .where('createdBy', isEqualTo: createdBy)
+          .get();
       final productSnapshot = await _firestore
           .collection(productsCollection)
           .where('createdBy', isEqualTo: createdBy)
@@ -75,10 +77,14 @@ class FirestoreService {
           .doc(product.id)
           .set(product.toMap());
 
-      await _firestore.collection(categoriesCollection).doc(_docId(
+      await _firestore.collection(categoriesCollection).doc(_categoryDocId(
+            product.createdBy,
             product.category,
           )).set(
-        {'nome': product.category},
+        {
+          'nome': product.category,
+          'createdBy': product.createdBy,
+        },
         SetOptions(merge: true),
       );
 
@@ -189,5 +195,9 @@ class FirestoreService {
         .replaceAll('ç', 'c')
         .replaceAll(RegExp(r'[^a-z0-9]+'), '_')
         .replaceAll(RegExp(r'^_|_$'), '');
+  }
+
+  String _categoryDocId(String createdBy, String category) {
+    return '${_docId(createdBy)}_${_docId(category)}';
   }
 }

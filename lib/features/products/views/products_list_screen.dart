@@ -41,7 +41,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
         const SnackBar(content: Text('Inicializando dados mestres...')),
       );
 
-      await DataSeeder.seedData();
+      await DataSeeder.seedData(_currentUserKey);
 
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
