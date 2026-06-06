@@ -7,25 +7,32 @@ class FirestoreService {
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<List<Product>> getAllProducts() async {
+  Future<List<Product>> getAllProducts(String createdBy) async {
     try {
       final snapshot = await _firestore
           .collection(productsCollection)
-          .orderBy('createdAt', descending: true)
+          .where('createdBy', isEqualTo: createdBy)
           .get();
 
-      return snapshot.docs
+      final products = snapshot.docs
           .map((doc) => Product.fromMap(doc.data(), doc.id))
           .toList();
+
+      products.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      return products;
     } catch (e) {
       throw Exception('Erro ao buscar produtos: $e');
     }
   }
 
-  Future<List<Product>> getProductsByCategory(String category) async {
+  Future<List<Product>> getProductsByCategory(
+    String category,
+    String createdBy,
+  ) async {
     try {
       final snapshot = await _firestore
           .collection(productsCollection)
+          .where('createdBy', isEqualTo: createdBy)
           .where('category', isEqualTo: category)
           .get();
 
@@ -40,12 +47,14 @@ class FirestoreService {
     }
   }
 
-  Future<List<String>> getCategories() async {
+  Future<List<String>> getCategories(String createdBy) async {
     try {
       final masterSnapshot =
           await _firestore.collection(categoriesCollection).get();
-      final productSnapshot =
-          await _firestore.collection(productsCollection).get();
+      final productSnapshot = await _firestore
+          .collection(productsCollection)
+          .where('createdBy', isEqualTo: createdBy)
+          .get();
 
       final categories = {
         ...masterSnapshot.docs.map((doc) => doc.data()['nome'] as String?),
@@ -81,38 +90,79 @@ class FirestoreService {
 
   Future<void> updateProduct(Product product) async {
     try {
-      await _firestore
-          .collection(productsCollection)
-          .doc(product.id)
-          .update(product.toMap());
+      final productRef =
+          _firestore.collection(productsCollection).doc(product.id);
+
+      await _firestore.runTransaction((transaction) async {
+        final snapshot = await transaction.get(productRef);
+
+        if (!snapshot.exists) {
+          throw Exception('Produto não encontrado.');
+        }
+
+        final currentProduct = Product.fromMap(
+          snapshot.data() as Map<String, dynamic>,
+          snapshot.id,
+        );
+
+        if (currentProduct.createdBy != product.createdBy) {
+          throw Exception('Você só pode atualizar seus próprios produtos.');
+        }
+
+        transaction.update(productRef, product.toMap());
+      });
     } catch (e) {
       throw Exception('Erro ao atualizar produto: $e');
     }
   }
 
-  Future<void> deleteProduct(String id) async {
+  Future<void> deleteProduct(String id, String createdBy) async {
     try {
-      await _firestore.collection(productsCollection).doc(id).delete();
+      final productRef = _firestore.collection(productsCollection).doc(id);
+
+      await _firestore.runTransaction((transaction) async {
+        final snapshot = await transaction.get(productRef);
+
+        if (!snapshot.exists) {
+          throw Exception('Produto não encontrado.');
+        }
+
+        final product = Product.fromMap(
+          snapshot.data() as Map<String, dynamic>,
+          snapshot.id,
+        );
+
+        if (product.createdBy != createdBy) {
+          throw Exception('Você só pode excluir seus próprios produtos.');
+        }
+
+        transaction.delete(productRef);
+      });
     } catch (e) {
       throw Exception('Erro ao deletar produto: $e');
     }
   }
 
-  Stream<List<Product>> getProductsStream() {
+  Stream<List<Product>> getProductsStream(String createdBy) {
     return _firestore
         .collection(productsCollection)
-        .orderBy('createdAt', descending: true)
+        .where('createdBy', isEqualTo: createdBy)
         .snapshots()
         .map(
-          (snapshot) => snapshot.docs
-              .map((doc) => Product.fromMap(doc.data(), doc.id))
-              .toList(),
+          (snapshot) {
+            final products = snapshot.docs
+                .map((doc) => Product.fromMap(doc.data(), doc.id))
+                .toList();
+
+            products.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+            return products;
+          },
         );
   }
 
-  Future<List<Product>> searchProducts(String query) async {
+  Future<List<Product>> searchProducts(String query, String createdBy) async {
     try {
-      final products = await getAllProducts();
+      final products = await getAllProducts(createdBy);
       final searchQuery = query.toLowerCase();
 
       return products

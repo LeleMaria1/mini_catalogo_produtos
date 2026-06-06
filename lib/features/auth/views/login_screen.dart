@@ -227,9 +227,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               color: const Color(0xFF00B894),
                             ),
                           ),
-                          child: Column(
+                          child: const Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
+                            children: [
                               Text(
                                 'Credenciais Demo:',
                                 style: TextStyle(

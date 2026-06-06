@@ -20,15 +20,19 @@ class ProductsListViewModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   String get searchQuery => _searchQuery;
 
-  Future<void> loadProducts() async {
+  Future<void> loadProducts(String createdBy) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
     try {
-      _allProducts = await _firestoreService.getAllProducts();
+      if (createdBy.isEmpty) {
+        throw Exception('Usuário não autenticado.');
+      }
+
+      _allProducts = await _firestoreService.getAllProducts(createdBy);
       _filteredProducts = _allProducts;
-      await _loadCategories();
+      await _loadCategories(createdBy);
       _isLoading = false;
       notifyListeners();
     } catch (e) {
@@ -38,9 +42,9 @@ class ProductsListViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> _loadCategories() async {
+  Future<void> _loadCategories(String createdBy) async {
     try {
-      _categories = await _firestoreService.getCategories();
+      _categories = await _firestoreService.getCategories(createdBy);
       notifyListeners();
     } catch (e) {
       _errorMessage = 'Erro ao carregar categorias: $e';
@@ -87,9 +91,13 @@ class ProductsListViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> deleteProduct(String id) async {
+  Future<void> deleteProduct(String id, String createdBy) async {
     try {
-      await _firestoreService.deleteProduct(id);
+      if (createdBy.isEmpty) {
+        throw Exception('Usuário não autenticado.');
+      }
+
+      await _firestoreService.deleteProduct(id, createdBy);
       _allProducts.removeWhere((product) => product.id == id);
       _applyFilters();
     } catch (e) {

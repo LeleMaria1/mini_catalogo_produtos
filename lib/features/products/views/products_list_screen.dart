@@ -20,13 +20,17 @@ class ProductsListScreen extends StatefulWidget {
 class _ProductsListScreenState extends State<ProductsListScreen> {
   late TextEditingController _searchController;
 
+  String get _currentUserKey {
+    return context.read<LoginViewModel>().user?.email ?? '';
+  }
+
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
     // Load products when screen initializes
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<ProductsListViewModel>().loadProducts();
+      context.read<ProductsListViewModel>().loadProducts(_currentUserKey);
     });
   }
 
@@ -47,7 +51,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
         ),
       );
 
-      await context.read<ProductsListViewModel>().loadProducts();
+      await context.read<ProductsListViewModel>().loadProducts(_currentUserKey);
     } catch (e) {
       if (!mounted) return;
       final errorMessage = e.toString();
@@ -110,7 +114,7 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
 
     if (!mounted) return;
     if (updated == true) {
-      await context.read<ProductsListViewModel>().loadProducts();
+      await context.read<ProductsListViewModel>().loadProducts(_currentUserKey);
     }
   }
 
@@ -130,7 +134,9 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
             TextButton(
               onPressed: () async {
                 Navigator.pop(context);
-                await context.read<ProductsListViewModel>().deleteProduct(id);
+                await context
+                    .read<ProductsListViewModel>()
+                    .deleteProduct(id, _currentUserKey);
               },
               child: const Text(
                 'Excluir',
@@ -326,7 +332,9 @@ class _ProductsListScreenState extends State<ProductsListScreen> {
           if (!context.mounted) return;
 
           if (productAdded == true) {
-            await context.read<ProductsListViewModel>().loadProducts();
+            await context
+                .read<ProductsListViewModel>()
+                .loadProducts(_currentUserKey);
           }
         },
         backgroundColor: const Color(0xFF6C5CE7),

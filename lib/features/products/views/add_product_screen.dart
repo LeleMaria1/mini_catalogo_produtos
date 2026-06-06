@@ -28,6 +28,11 @@ class _AddProductScreenState extends State<AddProductScreen> {
     _priceController = TextEditingController();
     _imageUrlController = TextEditingController();
     _newCategoryController = TextEditingController();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final userKey = context.read<LoginViewModel>().user?.email ?? '';
+      context.read<AddProductViewModel>().loadCategories(userKey);
+    });
   }
 
   @override
@@ -69,7 +74,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
 
     final loginViewModel = context.read<LoginViewModel>();
-    final userName = loginViewModel.user?.email ?? 'Admin';
+    final userName = loginViewModel.user?.email ?? '';
 
     viewModel.addProduct(
       name: _nameController.text.trim(),
