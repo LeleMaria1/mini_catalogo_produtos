@@ -103,3 +103,8 @@ ios/build/
 *.bak
 *.tmp
 *.temp
+
+#Arquivos de configuração do Firebase
+android/app/google-services.json
+lib/firebase/firebase_options_dev.dart
+lib/firebase/firebase_options_prd.dart
