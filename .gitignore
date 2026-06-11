@@ -104,6 +104,7 @@ ios/build/
 *.tmp
 *.temp
 
+
 #Arquivos de configuração do Firebase
 android/app/google-services.json
 lib/firebase/firebase_options_dev.dart
