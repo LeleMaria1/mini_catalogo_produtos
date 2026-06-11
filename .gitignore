@@ -87,3 +87,19 @@ lib/firebase_options.dart
 # arquivos de ambiente
 .env
 .env.*
+
+# Configurações locais do Android
+android/local.properties
+android/key.properties
+
+# Builds específicos
+android/app/build/
+ios/build/
+
+# VS Code (opcional)
+.vscode/
+
+# Arquivos de backup
+*.bak
+*.tmp
+*.temp
